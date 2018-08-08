@@ -9,6 +9,7 @@ import br.com.aplicacao.modelos.Usuario;
 import br.com.aplicacao.utilidades.conexao;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -22,6 +23,7 @@ import javax.persistence.criteria.Root;
 public class UsuarioDAO {
 
     EntityManager manager = conexao.getEntityManager();
+    EntityTransaction tx = manager.getTransaction();
 
     public String buscarTodos() {
 
@@ -47,8 +49,8 @@ public class UsuarioDAO {
                     + ") ao consultar pessoa no banco!");
 
         } finally {
-            manager.close();
-            conexao.close();
+            //manager.close();
+            //conexao.close();
         }
 
         return "Operação realizada com sucesso!";
@@ -70,26 +72,29 @@ public class UsuarioDAO {
             return null;
 
         } finally {
-            manager.close();
-            conexao.close();
+//            manager.close();
+//            conexao.close();
         }
     }
 
-    public boolean inserirUsuario(Usuario usuario) {
+    public boolean inserirUsuario(String usuario, String senha) {
 
         try {
+            tx.begin();
 
             manager.persist(usuario);
+            tx.commit();
             return true;
 
         } catch (Exception e) {
+            tx.rollback();
             System.out.println(" Erro (" + e.getMessage()
                     + ") ao tentar inserir usuario no sistema!");
             return false;
 
         } finally {
-            manager.close();
-            conexao.close();
+            //        manager.close();
+            //       conexao.close();
         }
     }
 
@@ -105,8 +110,8 @@ public class UsuarioDAO {
             return false;
 
         } finally {
-            manager.close();
-            conexao.close();
+            //     manager.close();
+            //    conexao.close();
         }
     }
 }
