@@ -16,9 +16,9 @@ public class crudUsuario {
     public static void main(String[] args) {
 
         UsuarioDAO usuario = new UsuarioDAO();
-        usuario.buscarTodos();
+        //usuario.buscarTodos();
         //usuario.getUsuario("Amaral", "123456");
-        //usuario.inserirUsuario("Magno", "123456");
+        usuario.inserirUsuario();
     }
 
 }

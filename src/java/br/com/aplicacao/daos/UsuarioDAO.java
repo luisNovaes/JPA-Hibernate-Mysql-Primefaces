@@ -25,6 +25,8 @@ public class UsuarioDAO {
     EntityManager manager = conexao.getEntityManager();
     EntityTransaction tx = manager.getTransaction();
 
+    Usuario usuario = new Usuario();
+
     public String buscarTodos() {
 
         try {
@@ -59,7 +61,7 @@ public class UsuarioDAO {
     public Usuario getUsuario(String nomeUsuario, String senha) {
 
         try {
-            Usuario usuario = (Usuario) manager
+            this.usuario = (Usuario) manager
                     .createQuery(
                             "SELECT u from Usuario u where u.nome = :name and u.senha = :senha")
                     .setParameter("name", nomeUsuario)
@@ -77,30 +79,29 @@ public class UsuarioDAO {
         }
     }
 
-    public boolean inserirUsuario(String usuario, String senha) {
+    public String inserirUsuario() {
 
         try {
             tx.begin();
 
-            manager.persist(usuario);
+            this.usuario.setNome("magno");
+            this.usuario.setSenha("1234");
+            manager.persist(this.usuario);
+
             tx.commit();
-            return true;
 
         } catch (Exception e) {
             tx.rollback();
             System.out.println(" Erro (" + e.getMessage()
                     + ") ao tentar inserir usuario no sistema!");
-            return false;
 
-        } finally {
-            //        manager.close();
-            //       conexao.close();
         }
+        return "Operação realizada com sucesso!";
     }
 
     public boolean deletarUsuario(Usuario usuario) {
-        try {
 
+        try {
             manager.remove(usuario);
             return true;
 
